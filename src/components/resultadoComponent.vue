@@ -30,17 +30,17 @@
           const searchParams = new URLSearchParams(window.location.search);
           const valorParametro = searchParams.get('username');
           this.montaResultado(valorParametro);
-          this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
+          alert(this.getAvatarUrl(valorParametro));
       },
     methods:{
         async montaResultado(username){
 
-            const response = await axios.get(`https:api.github.com/users/${username}/repos`);
+            const response = await fetch(`https:api.github.com/users/${username}/repos`);
             const repositorios = await response.data;
 
             let commitCount = 0;
                for (const repositorio of repositorios) {
-                   const commitsResponse = await axios.get(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
+                   const commitsResponse = await fetch(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
                    const commits = await commitsResponse.data;
                    commitCount += commits.length;
                }
@@ -67,14 +67,11 @@
         async getAvatarUrl(username){
 
             try {
-                const response  = await axios.get(`https://api.github.com/users/${username}`);
+                const response  = await fetch(`https://api.github.com/users/${username}`);
                 const userData  = await response.data;
                 const avatarUrl = await userData.avatar_url;
                 
-                if(!avatarUrl){
-                    return "img/perfil.jpeg";
-                }
-                return avatarUrl;
+                return await avatarUrl;
             } catch (error) {
                 console.error('Erro ao obter a URL da foto de perfil:', error);
                 return;
