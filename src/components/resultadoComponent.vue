@@ -27,23 +27,23 @@
            } 
       },
       created(){
-        const searchParams = new URLSearchParams(window.location.search);
-        const valorParametro = searchParams.get('username');
-        this.montaResultado(valorParametro);
-        //this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
+          const searchParams = new URLSearchParams(window.location.search);
+          const valorParametro = searchParams.get('username');
+          this.montaResultado(valorParametro);
+          this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
       },
     methods:{
         async montaResultado(username){
 
-            //const response = await axios.get(`https://api.github.com/users/${username}/repos`);
-            //const repositorios = response.data;
+            const response = await axios.get(`https:api.github.com/users/${username}/repos`);
+            const repositorios = response.data;
 
             let commitCount = 0;
-            //   for (const repositorio of repositorios) {
-            //       //const commitsResponse = await axios.get(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
-            //       const commits = commitsResponse.data;
-            //       commitCount += commits.length;
-            //   }
+               for (const repositorio of repositorios) {
+                   const commitsResponse = await axios.get(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
+                   const commits = commitsResponse.data;
+                   commitCount += commits.length;
+               }
             
 
             this.quantidadeCommits = commitCount;
