@@ -41,7 +41,7 @@
             let commitCount = 0;
                for (const repositorio of repositorios) {
                    const commitsResponse = await axios.get(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
-                   const commits = commitsResponse.data;
+                   const commits = await commitsResponse.data;
                    commitCount += commits.length;
                }
             
@@ -72,7 +72,7 @@
                 const avatarUrl = await userData.avatar_url;
                 
                 if(!avatarUrl){
-                    return "https://avatars.githubusercontent.com/u/79112366?v=4";
+                    return "img/perfil.jpeg";
                 }
                 return avatarUrl;
             } catch (error) {
