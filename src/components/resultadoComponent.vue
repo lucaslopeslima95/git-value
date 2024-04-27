@@ -30,7 +30,7 @@
           const searchParams = new URLSearchParams(window.location.search);
           const valorParametro = searchParams.get('username');
           this.montaResultado(valorParametro);
-          alert(this.getAvatarUrl(valorParametro));
+          this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
       },
     methods:{
         async montaResultado(username){
