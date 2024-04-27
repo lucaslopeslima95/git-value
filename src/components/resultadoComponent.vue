@@ -36,7 +36,7 @@
         async montaResultado(username){
 
             const response = await axios.get(`https:api.github.com/users/${username}/repos`);
-            const repositorios = response.data;
+            const repositorios = await response.data;
 
             let commitCount = 0;
                for (const repositorio of repositorios) {
@@ -67,11 +67,12 @@
         async getAvatarUrl(username){
 
             try {
-                const response = await axios.get(`https://api.github.com/users/${username}`);
-                const userData = response.data;
-                const avatarUrl = userData.avatar_url;
+                const response  = await axios.get(`https://api.github.com/users/${username}`);
+                const userData  = await response.data;
+                const avatarUrl = await userData.avatar_url;
+                
                 if(!avatarUrl){
-                    return "img/perfil.jpeg";
+                    return "https://avatars.githubusercontent.com/u/79112366?v=4";
                 }
                 return avatarUrl;
             } catch (error) {
