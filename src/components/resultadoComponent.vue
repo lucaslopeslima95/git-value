@@ -30,24 +30,24 @@
           const searchParams = new URLSearchParams(window.location.search);
           const valorParametro = searchParams.get('username');
           this.montaResultado(valorParametro);
+       
           this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
       },
     methods:{
         async montaResultado(username){
 
-            const response = await fetch(`https:api.github.com/users/${username}/repos`);
-            const repositorios = await response.data;
+            const response = await fetch(`https://api.github.com/users/${username}/repos`);
+            const repositorios = await response.json(); 
 
             let commitCount = 0;
-               for (const repositorio of repositorios) {
-                   const commitsResponse = await fetch(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
-                   const commits = await commitsResponse.data;
-                   commitCount += commits.length;
-               }
-            
+            for (const repositorio of repositorios) {
+                const commitsResponse = await fetch(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
+                const commits = await commitsResponse.json();
+                commitCount += commits.length;
+            }
 
             this.quantidadeCommits = commitCount;
-            this.avaliacaoPerfil(commitCount)
+            this.avaliacaoPerfil(commitCount);
 
             
         },
@@ -67,11 +67,11 @@
         async getAvatarUrl(username){
 
             try {
-                const response  = await fetch(`https://api.github.com/users/${username}`);
-                const userData  = await response.data;
-                const avatarUrl = await userData.avatar_url;
+                const response = await fetch(`https://api.github.com/users/${username}`);
+                const userData = await response.json(); 
+                const avatarUrl = userData.avatar_url; 
                 
-                return await avatarUrl;
+                return avatarUrl;
             } catch (error) {
                 console.error('Erro ao obter a URL da foto de perfil:', error);
                 return;
