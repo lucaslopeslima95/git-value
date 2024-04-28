@@ -1,21 +1,33 @@
 <template>
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <ul class="d-flex justify-content-center align-items-center flex-column">
-            <li><img height="250" width="250" :src="linkFotoPerfil" alt=""></li>
-            <li class="list-item"><div class="campo-avaliado">Quantidade Commits públicos:</div></li>
-            <li class="list-result">{{ this.quantidadeCommits }}</li>
-            <li class="list-item"><div class="campo-avaliado">Avaliação do perfil:</div></li>
-            <li class="list-result">{{ this.avaliacao }}</li>
-            <li class="list-item"><div class="campo-avaliado">Cotação do perfil:</div></li>
-            <li class="list-result"> {{ (this.quantidadeCommits*37.39).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
-            <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link></li>
-        </ul>
+    <div>
+        <div class="modal" v-show="modalLoading" id="modal-loading" data-backdrop="static">
+            <div class="modal-dialog modal-sm" v-show="modalLoading">
+                <div class="modal-content" v-show="modalLoading">
+                    <div class="modal-body text-center" v-show="modalLoading">
+                        <div class="loading-spinner mb-2" v-show="modalLoading"></div>
+                        <div v-show="modalLoading">Carregando...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center vh-100">
+            <ul class="d-flex justify-content-center align-items-center flex-column">
+                <li><img height="250" width="250" :src="linkFotoPerfil" alt=""></li>
+                <li class="list-item"><div class="campo-avaliado">Quantidade Commits públicos:</div></li>
+                <li class="list-result">{{ this.quantidadeCommits }}</li>
+                <li class="list-item"><div class="campo-avaliado">Avaliação do perfil:</div></li>
+                <li class="list-result">{{ this.avaliacao }}</li>
+                <li class="list-item"><div class="campo-avaliado">Cotação do perfil:</div></li>
+                <li class="list-result"> {{ (this.quantidadeCommits*37.39).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
+                <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link></li>
+            </ul>
+        </div>
     </div>
   </template>
   
   <script>
-  import axios from 'axios';
-  
+  import Swal from 'sweetalert2/dist/sweetalert2.js';
+
   export default {
       name:"ResultadoComponent",
       data(){
@@ -23,10 +35,13 @@
                username:"",
                quantidadeCommits:0,
                avaliacao:"",
-               linkFotoPerfil:"img/perfil.jpeg"
+               linkFotoPerfil:"img/perfil.jpeg",
+               modalLoading:true
            } 
       },
       created(){
+
+          this.modalLoading = true;
           const searchParams = new URLSearchParams(window.location.search);
           const valorParametro = searchParams.get('username');
           
@@ -39,6 +54,14 @@
             const response = await fetch(`https://api.github.com/users/${username}/repos`);
             const repositorios = await response.json(); 
 
+            if(!this.isIterable(repositorios)){
+                  Swal.fire({
+                    icon: "warning",
+                    title: "Oops...Não encontrei seu perfil",
+                  });
+                return
+            }
+
             let commitCount = 0;
             for (const repositorio of repositorios) {
                 const commitsResponse = await fetch(`https://api.github.com/repos/${username}/${repositorio.name}/commits`);
@@ -47,6 +70,7 @@
             }
             this.quantidadeCommits = commitCount;
             this.avaliacaoPerfil(commitCount);
+            
         },
         avaliacaoPerfil(quantidadeCommits){
 
@@ -68,11 +92,19 @@
                 const response = await fetch(`https://api.github.com/users/${username}`);
                 const userData = await response.json(); 
 
-                this.linkFotoPerfil = userData.avatar_url;
+                if(userData.avatar_url){
+
+                    this.linkFotoPerfil = userData.avatar_url;
+                    return    
+                }
+                this.linkFotoPerfil = "img/perfil.jpeg";
             } catch (error) {
                 console.error('Erro ao obter a URL da foto de perfil:', error);
                 return;
             }
+        },
+        isIterable(obj) {
+            return typeof obj === 'object' && typeof obj[Symbol.iterator] === 'function';
         }
     }
   }
@@ -101,5 +133,24 @@
     margin-bottom: 30px;
     font-size: 20pt;
   }
+
+  .loading-spinner{
+        width:30px;
+        height:30px;
+        border:2px solid indigo;
+        border-radius:50%;
+        border-top-color:#0001;
+        display: block;
+        animation:loadingspinner .7s linear infinite;
+    }
+
+    @keyframes loadingspinner{
+        0%{
+            transform:rotate(0deg)
+        }
+        100%{
+            transform:rotate(360deg)
+        }
+    }
   
   </style>
