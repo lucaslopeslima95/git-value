@@ -7,8 +7,8 @@
             <li class="list-item"><div class="campo-avaliado">Avaliação do perfil:</div></li>
             <li class="list-result">{{ this.avaliacao }}</li>
             <li class="list-item"><div class="campo-avaliado">Cotação do perfil:</div></li>
-            <li class="list-result"> {{ (this.quantidadeCommits*27.39).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
-            <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link> </li>
+            <li class="list-result"> {{ (this.quantidadeCommits*37.39).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
+            <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link></li>
         </ul>
     </div>
   </template>
@@ -29,9 +29,9 @@
       created(){
           const searchParams = new URLSearchParams(window.location.search);
           const valorParametro = searchParams.get('username');
+          
           this.montaResultado(valorParametro);
-       
-          this.linkFotoPerfil = this.getAvatarUrl(valorParametro);
+          this.getAvatarUrl(valorParametro);
       },
     methods:{
         async montaResultado(username){
@@ -45,11 +45,8 @@
                 const commits = await commitsResponse.json();
                 commitCount += commits.length;
             }
-
             this.quantidadeCommits = commitCount;
             this.avaliacaoPerfil(commitCount);
-
-            
         },
         avaliacaoPerfil(quantidadeCommits){
 
@@ -67,11 +64,11 @@
         async getAvatarUrl(username){
 
             try {
+
                 const response = await fetch(`https://api.github.com/users/${username}`);
                 const userData = await response.json(); 
-                const avatarUrl = userData.avatar_url; 
-                
-                return avatarUrl;
+
+                this.linkFotoPerfil = userData.avatar_url;
             } catch (error) {
                 console.error('Erro ao obter a URL da foto de perfil:', error);
                 return;

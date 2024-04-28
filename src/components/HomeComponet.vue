@@ -4,7 +4,7 @@
       <p class="titulo">Descubra quanto vale seu</p>
     </div>
       <div class="d-flex justify-content-center align-items-center flex-column">
-        <img src="/public/img/gitlogo.jpg" id="git-logo">
+        <img src="/img/logo-git.png" id="git-logo">
         <p id="informe-seu-user">Informe o seu usuario do github aqui.</p>
         <input type="text" minlength="3" v-model="username" class="w-50">
         <button type="submit" class="btn btn-secondary mt-3 w-25" @click="buscaQuantidadeCommits()">Avaliar</button>
