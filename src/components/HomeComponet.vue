@@ -5,8 +5,8 @@
     </div>
       <div class="d-flex justify-content-center align-items-center flex-column">
         <img src="/img/logo-git.png" id="git-logo">
-        <p id="informe-seu-user">Informe o seu usuario do github aqui.</p>
-        <input type="text" minlength="3" v-model="username" class="w-50">
+        <p id="informe-seu-user">Informe o seu nome de usuario do github aqui.(Não é o email)</p>
+        <input type="text" minlength="3" v-model="username" title="https://github.com/username" class="w-50">
         <button type="submit" class="btn btn-secondary mt-3 w-25" @click="buscaQuantidadeCommits()">Avaliar</button>
       </div>
   </div>
