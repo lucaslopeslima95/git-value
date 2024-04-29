@@ -59,11 +59,11 @@ export default {
 
 <style>
 .container{
-  background-color: black;
+  background-color: #040707;
 }
 #git-logo{
-  max-width: 50vw;
-  max-height: 50vh;
+  max-width: 50%;
+  max-height: 50%;
 }
 .titulo{
   color:white;

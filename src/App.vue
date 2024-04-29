@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="position-relative">
     <navbar-component/>
     <router-view/>
   </div>
@@ -8,14 +8,13 @@
 <script>
 import navbarComponent from "./components/navbarComponent.vue";
 export default{
-  
   components:{navbarComponent}
 }
 </script>
 <style>
 #app{
-  background-color: black;
-  height:100vh;
+  background-color: #040707;
+  height:92.36vh;
 }
 
 </style>

@@ -1,34 +1,23 @@
 <template>
-    <div>
-        <div class="modal" v-show="modalLoading" id="modal-loading" data-backdrop="static">
-            <div class="modal-dialog modal-sm" v-show="modalLoading">
-                <div class="modal-content" v-show="modalLoading">
-                    <div class="modal-body text-center" v-show="modalLoading">
-                        <div class="loading-spinner mb-2" v-show="modalLoading"></div>
-                        <div v-show="modalLoading">Carregando...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center align-items-center vh-100">
-            <ul class="d-flex justify-content-center align-items-center flex-column">
-                <li><img height="250" width="250" :src="linkFotoPerfil" alt=""></li>
-                <li class="list-item"><div class="campo-avaliado">Quantidade Commits públicos:</div></li>
-                <li class="list-result">{{ this.quantidadeCommits }}</li>
-                <li class="list-item"><div class="campo-avaliado">Avaliação do perfil:</div></li>
-                <li class="list-result">{{ this.avaliacao }}</li>
-                <li class="list-item"><div class="campo-avaliado">Cotação do perfil:</div></li>
-                <li class="list-result"> {{ (this.quantidadeCommits*37.39).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
-                <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link></li>
-            </ul>
-        </div>
-    </div>
-  </template>
+    <modal-load-component v-show="modalLoading"/>
+    <ul class="d-flex justify-content-center align-items-center flex-column">
+        <li><img height="250" width="250" :src="linkFotoPerfil" alt=""></li>
+        <li class="list-item"><div class="campo-avaliado">Quantidade Commits públicos:</div></li>
+        <li class="list-result">{{ this.quantidadeCommits }}</li>
+        <li class="list-item"><div class="campo-avaliado">Avaliação do perfil:</div></li>
+        <li class="list-result">{{ this.avaliacao }}</li>
+        <li class="list-item"><div class="campo-avaliado">Cotação do perfil:</div></li>
+        <li class="list-result"> {{ (this.quantidadeCommits*37.45).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</li>
+        <li><router-link to="/"><button class="btn btn-danger mt-5">Voltar</button></router-link></li>
+    </ul>
+</template>
   
   <script>
   import Swal from 'sweetalert2/dist/sweetalert2.js';
+  import ModalLoadComponent from './ModalLoadComponent.vue';
 
   export default {
+  components: { ModalLoadComponent },
       name:"ResultadoComponent",
       data(){
            return{
@@ -36,7 +25,6 @@
                quantidadeCommits:0,
                avaliacao:"",
                linkFotoPerfil:"img/perfil.jpeg",
-               modalLoading:true
            } 
       },
       created(){
@@ -84,6 +72,7 @@
 
                 this.avaliacao = "Você é uma maquina de Codar!"
             }
+            this.modalLoading = false;
         },
         async getAvatarUrl(username){
 
@@ -134,23 +123,5 @@
     font-size: 20pt;
   }
 
-  .loading-spinner{
-        width:30px;
-        height:30px;
-        border:2px solid indigo;
-        border-radius:50%;
-        border-top-color:#0001;
-        display: block;
-        animation:loadingspinner .7s linear infinite;
-    }
-
-    @keyframes loadingspinner{
-        0%{
-            transform:rotate(0deg)
-        }
-        100%{
-            transform:rotate(360deg)
-        }
-    }
   
   </style>
